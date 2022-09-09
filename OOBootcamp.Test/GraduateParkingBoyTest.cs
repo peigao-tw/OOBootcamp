@@ -151,4 +151,63 @@ public class GraduateParkingBoyTest
 
         Assert.Throws<NoParkingSlotRecordException>(() => _graduateParkingBoy.RetrieveVehicle(new Vehicle(_fixture.Create<string>())));
     }
+
+    [Test]
+    [Category(nameof(AvailableParkingLotStrategy))]
+    public void should_park_vehicle_successfully_when_ParkVehicle_given_parking_lot_has_available_space_by_available_strategy()
+    {
+        _graduateParkingBoy.SetStrategy(new AvailableParkingLotStrategy());
+
+        string licensePlate = _fixture.Create<string>();
+        var vehicle = new Vehicle(licensePlate);
+        Assert.True(_graduateParkingBoy.ParkVehicle(vehicle));
+
+        var parkingLot = _graduateParkingBoy.GetParkingLot(vehicle);
+
+        Assert.NotNull(parkingLot);
+        Assert.AreEqual(_parkingLots.First().Name, parkingLot!.Name);
+    }
+
+    [Test]
+    [Category(nameof(AvailableParkingLotStrategy))]
+    public void should_park_vehicle_successfully_when_ParkVehicle_given_parking_lot_has_available_space_by_available_strategy_2()
+    {
+        string licensePlate = string.Empty;
+
+        for (int i = 0; i < 2;  i++)
+        {
+            licensePlate = _fixture.Create<string>();
+            _graduateParkingBoy.ParkVehicle(new Vehicle(licensePlate));
+        }
+
+        _graduateParkingBoy.SetStrategy(new AvailableParkingLotStrategy());
+
+        licensePlate = _fixture.Create<string>();
+        var vehicle = new Vehicle(licensePlate);
+        Assert.True(_graduateParkingBoy.ParkVehicle(vehicle));
+
+        var parkingLot = _graduateParkingBoy.GetParkingLot(vehicle);
+
+        Assert.NotNull(parkingLot);
+        Assert.AreEqual(_parkingLots.Last().Name, parkingLot!.Name);
+    }
+
+    [Test]
+    [Category(nameof(AvailableParkingLotStrategy))]
+    public void should_park_vehicle_successfully_when_ParkVehicle_given_parking_lot_has_available_space_by_available_strategy_3()
+    {
+        string licensePlate = string.Empty;
+
+        for (int i = 0; i < MAX_CAPACITY * _parkingLots.Count();  i++)
+        {
+            licensePlate = _fixture.Create<string>();
+            _graduateParkingBoy.ParkVehicle(new Vehicle(licensePlate));
+        }
+
+        _graduateParkingBoy.SetStrategy(new AvailableParkingLotStrategy());
+
+        licensePlate = _fixture.Create<string>();
+        var vehicle = new Vehicle(licensePlate);
+        Assert.Throws<NoParkingSlotAvailableException>(() => _graduateParkingBoy.ParkVehicle(new Vehicle(licensePlate)));
+    }
 }

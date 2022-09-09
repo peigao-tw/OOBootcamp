@@ -56,4 +56,10 @@ public class GraduateParkingBoy
 
         return isRemoved;
     }
+
+    public ParkingLot? GetParkingLot(Vehicle vehicle)
+    {
+        return _parkingRecord.GetValueOrDefault(vehicle);
+    }
+
 }
