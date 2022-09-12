@@ -25,7 +25,7 @@ public class SmartParkingBoyTest
     }
 
     [Test]
-    public void should_park_vehicle_successfully_when_ParkVehicle_given_parking_lot_has_available_space()
+    public void should_park_vehicle_successfully_when_ParkVehicle_given_empty_parking_lot()
     {
         string licensePlate = _fixture.Create<string>();
         var vehicle = new Vehicle(licensePlate);
