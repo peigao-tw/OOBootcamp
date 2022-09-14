@@ -16,6 +16,12 @@ public abstract class ParkingBoy
 
     public bool ParkVehicle(Vehicle vehicle)
     {
+        // Certificate
+        bool isCertificate = Certificate(vehicle);
+
+        if (!isCertificate)
+            return false;
+
         // choose where to park
         var parkingLot = GetAvailableParkingLot();
 
@@ -32,6 +38,8 @@ public abstract class ParkingBoy
     }
 
     public abstract ParkingLot? GetAvailableParkingLot();
+
+    public abstract bool Certificate(Vehicle vehicle);
 
     public bool RetrieveVehicle(Vehicle vehicle)
     {

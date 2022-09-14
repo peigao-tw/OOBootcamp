@@ -5,10 +5,10 @@ using NUnit.Framework;
 
 namespace OOBootcamp.Test;
 
-public class SmartParkingBoyTest
+public class SpecializedParkingBoyTest 
 {
     private const int MAX_CAPACITY = 4;
-    private SmartParkingBoy _smartParkingBoy = null!;
+    private SpecializedParkingBoy  _specializedParkingBoy = null!;
     private IEnumerable<ParkingLot> _parkingLots = null!;
     private Fixture _fixture = new Fixture();
 
@@ -21,7 +21,7 @@ public class SmartParkingBoyTest
             new ParkingLot(MAX_CAPACITY * 2, 5, _fixture.Create<string>()),
         };
 
-        _smartParkingBoy = new SmartParkingBoy(_parkingLots);
+        _specializedParkingBoy = new SpecializedParkingBoy(_parkingLots);
     }
 
     [Test]
@@ -31,9 +31,9 @@ public class SmartParkingBoyTest
         var vehicle = new Vehicle(licensePlate);
 
         // park successfully
-        Assert.True(_smartParkingBoy.ParkVehicle(vehicle));
+        Assert.True(_specializedParkingBoy.ParkVehicle(vehicle));
 
-        var parkingLot = _smartParkingBoy.GetParkingLot(vehicle);
+        var parkingLot = _specializedParkingBoy.GetParkingLot(vehicle);
 
         // park in second parkinglot
         Assert.NotNull(parkingLot);
@@ -51,9 +51,9 @@ public class SmartParkingBoyTest
         var vehicle = new Vehicle(licensePlate);
 
         // Assertion
-        Assert.True(_smartParkingBoy.ParkVehicle(vehicle));
+        Assert.True(_specializedParkingBoy.ParkVehicle(vehicle));
 
-        var parkingLot = _smartParkingBoy.GetParkingLot(vehicle);
+        var parkingLot = _specializedParkingBoy.GetParkingLot(vehicle);
 
         // park in second parkinglot
         Assert.NotNull(parkingLot);
@@ -78,9 +78,9 @@ public class SmartParkingBoyTest
         var vehicle = new Vehicle(licensePlate);
 
         // Assertion
-        Assert.True(_smartParkingBoy.ParkVehicle(vehicle));
+        Assert.True(_specializedParkingBoy.ParkVehicle(vehicle));
 
-        var actualParkingLot = _smartParkingBoy.GetParkingLot(vehicle);
+        var actualParkingLot = _specializedParkingBoy.GetParkingLot(vehicle);
 
         // park in second parkinglot
         Assert.NotNull(actualParkingLot);
@@ -101,29 +101,25 @@ public class SmartParkingBoyTest
 
         // Action
         // Assertion
-        Assert.Throws<NoParkingSlotAvailableException>(() => _smartParkingBoy.ParkVehicle(new Vehicle(_fixture.Create<string>())));
+        Assert.Throws<NoParkingSlotAvailableException>(() => _specializedParkingBoy.ParkVehicle(new Vehicle(_fixture.Create<string>())));
     }
 
-    // For Specialized
+
+    // For Specialize
     [Test]
-    public void should_park_truck_vehicle_failure_when_ParkVehicle_given_empty_parking_lot()
+    public void should_park_truck_vehicle_successfully_when_ParkVehicle_given_empty_parking_lot()
     {
         string licensePlate = _fixture.Create<string>();
         var vehicle = new Vehicle(licensePlate);
         vehicle.VehicleType = VehicleType.Trunk;
 
         // park successfully
-        Assert.False(_smartParkingBoy.ParkVehicle(vehicle));
-    }
+        Assert.True(_specializedParkingBoy.ParkVehicle(vehicle));
 
-    [Test]
-    public void should_park_super_car_vehicle_failure_when_ParkVehicle_given_empty_parking_lot()
-    {
-        string licensePlate = _fixture.Create<string>();
-        var vehicle = new Vehicle(licensePlate);
-        vehicle.VehicleType = VehicleType.SuperCar;
+        var parkingLot = _specializedParkingBoy.GetParkingLot(vehicle);
 
-        // park successfully
-        Assert.False(_smartParkingBoy.ParkVehicle(vehicle));
+        // park in second parkinglot
+        Assert.NotNull(parkingLot);
+        Assert.AreEqual(_parkingLots.Last().Name, parkingLot!.Name);
     }
 }

@@ -1,14 +1,17 @@
 namespace OOBootcamp;
 
-public class SmartParkingBoy: ParkingBoy
+public class SpecializedParkingBoy: ParkingBoy
 {
-    public SmartParkingBoy(IEnumerable<ParkingLot> parkingLots): base(parkingLots)
+    public SpecializedParkingBoy(IEnumerable<ParkingLot> parkingLots): base(parkingLots)
     {
     }
 
     public override bool Certificate(Vehicle vehicle)
     {
-        return vehicle.VehicleType == VehicleType.General ;
+        if (vehicle.VehicleType == VehicleType.General || vehicle.VehicleType == VehicleType.SuperCar || vehicle.VehicleType == VehicleType.Trunk)
+            return true;
+
+        return false;
     }
 
     public override ParkingLot? GetAvailableParkingLot()
