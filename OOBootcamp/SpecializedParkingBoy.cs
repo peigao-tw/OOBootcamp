@@ -6,6 +6,8 @@ public class SpecializedParkingBoy: ParkingBoy
     {
     }
 
+    public override int Priority { get; set; } = 1;
+
     public override bool Certificate(Vehicle vehicle)
     {
         if (vehicle.VehicleType == VehicleType.General || vehicle.VehicleType == VehicleType.SuperCar || vehicle.VehicleType == VehicleType.Trunk)

@@ -9,12 +9,14 @@ public abstract class ParkingBoy
     protected readonly IEnumerable<ParkingLot> _parkingLots;
     protected ConcurrentDictionary<Vehicle, ParkingLot> _parkingRecord = new ConcurrentDictionary<Vehicle, ParkingLot>();
 
+    public virtual int Priority { get; set; } = 0;
+
     public ParkingBoy(IEnumerable<ParkingLot> parkingLots)
     {
         this._parkingLots = parkingLots;
     }
 
-    public bool ParkVehicle(Vehicle vehicle)
+    public virtual bool ParkVehicle(Vehicle vehicle)
     {
         // Certificate
         bool isCertificate = Certificate(vehicle);

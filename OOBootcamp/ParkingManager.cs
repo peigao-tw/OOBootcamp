@@ -1,24 +1,56 @@
 namespace OOBootcamp;
 
-public class ParkingManager
+public class ParkingManager : ParkingBoy
 {
     public IEnumerable<ParkingBoy> ParkingBoys { get; set; } = new List<ParkingBoy>();
 
-    public bool ParkVehicle(Vehicle vehicle)
+    private ParkingBoy? GetParkingBoy(Vehicle vehicle)
     {
-        var parkingBoy = ParkingBoys.FirstOrDefault(boy => boy.Certificate(vehicle));
-        if (parkingBoy is null)
-            throw new VehicleNotSupportException(vehicle);
+        var parkingBoy = ParkingBoys.Where(boy => boy.Certificate(vehicle))
+            .OrderByDescending(boy => boy.Priority);
 
-        return parkingBoy.ParkVehicle(vehicle);
+        return parkingBoy.FirstOrDefault();
     }
 
-    public bool RetrieveVehicle(Vehicle vehicle)
+    public ParkingManager(IEnumerable<ParkingLot> parkingLots) : base(parkingLots)
     {
-        var parkingBoy = ParkingBoys.FirstOrDefault();
-        if (parkingBoy is null)
-            throw new ShorthandedException(vehicle);
-
-        return parkingBoy.RetrieveVehicle(vehicle);
     }
+
+    public ParkingManager(IEnumerable<ParkingLot> parkingLots, IEnumerable<ParkingBoy> parkingBoys) :
+        base(parkingLots)
+    {
+        ParkingBoys = parkingBoys;
+    }
+
+    public override bool ParkVehicle(Vehicle vehicle)
+    {
+        // Get Parking Boy
+        var parkingBoy = GetParkingBoy(vehicle);
+
+        if (parkingBoy != null)
+            return parkingBoy.ParkVehicle(vehicle);
+
+        return base.ParkVehicle(vehicle);
+    }
+
+    public override bool Certificate(Vehicle vehicle)
+    {
+        return true;
+    }
+
+    public override ParkingLot? GetAvailableParkingLot()
+    {
+        var parkingLot = _parkingLots.OrderByDescending(p => p.AvailableCount)
+            .ThenByDescending(p => (double)p.AvailableCount / p.MaxCapacity)
+            .FirstOrDefault();
+
+        if (parkingLot is null || parkingLot.AvailableCount == 0)
+            return null;
+
+        return parkingLot;
+    }
+
+    // public bool RetrieveVehicle(Vehicle vehicle)
+    // {
+    // }
 }

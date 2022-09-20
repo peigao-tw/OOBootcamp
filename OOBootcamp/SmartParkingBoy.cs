@@ -6,6 +6,8 @@ public class SmartParkingBoy: ParkingBoy
     {
     }
 
+    public override int Priority { get; set; } = 2;
+
     public override bool Certificate(Vehicle vehicle)
     {
         return vehicle.VehicleType == VehicleType.General ;

@@ -6,6 +6,8 @@ public class GraduateParkingBoy: ParkingBoy
     {
     }
 
+    public override int Priority { get; set; } = 3;
+
     public override bool Certificate(Vehicle vehicle)
     {
         return vehicle.VehicleType == VehicleType.General ;
